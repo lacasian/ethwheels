@@ -1,4 +1,4 @@
-//go:generate go run ../main.go --abi-folder ../ethgen/testdata/_source --package-path ../ethgen/testdata
+//go:generate go run ../cmd/ethgen/main.go --abi-folder ../ethgen/testdata/_source --package-path ../ethgen/testdata
 
 package ethgen_test
 

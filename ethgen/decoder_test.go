@@ -35,7 +35,7 @@ func TestUnpackLog(t *testing.T) {
 			var event types.Log
 			thelper.Load(t, ef, &event)
 
-			dec, err := testdata.NewERC20Decoder()
+			dec := testdata.NewERC20Decoder()
 			actual, err := dec.ERC20TransferEvent(event)
 			if tt.wantErr {
 				require.Error(t, err)

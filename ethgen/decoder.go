@@ -41,9 +41,13 @@ func (d *Decoder) UnpackLogIntoMap(out map[string]interface{}, event string, log
 	return abi.ParseTopicsIntoMap(out, indexed, log.Topics[1:])
 }
 
-func NewDecoder(abiJSON string) (*Decoder, error) {
+func NewDecoder(abiJSON string) *Decoder {
 	a, err := abi.JSON(strings.NewReader(abiJSON))
+	// we should never run into this since the decoders are generated from the ABIs in the first place
+	if err != nil {
+		panic("failed to initialize decoder")
+	}
 	return &Decoder{
 		ABI: &a,
-	}, err
+	}
 }

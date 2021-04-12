@@ -16,15 +16,17 @@ import (
 
 const {{.Prefix}}ABI = "{{.InputABI}}"
 
+var {{.Prefix}} = New{{.Prefix}}Decoder()
+
 type {{.Prefix}}Decoder struct {
 	*ethgen.Decoder
 }
 
-func New{{.Prefix}}Decoder() (*{{.Prefix}}Decoder, error) {
-	dec, err := ethgen.NewDecoder({{.Prefix}}ABI)
+func New{{.Prefix}}Decoder() *{{.Prefix}}Decoder {
+	dec := ethgen.NewDecoder({{.Prefix}}ABI)
 	return &{{.Prefix}}Decoder {
 		dec,
-	}, err
+	}
 }
 
 {{range .Structs}}
