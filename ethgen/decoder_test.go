@@ -35,8 +35,7 @@ func TestUnpackLog(t *testing.T) {
 			var event types.Log
 			thelper.Load(t, ef, &event)
 
-			dec := testdata.NewERC20Decoder()
-			actual, err := dec.ERC20TransferEvent(event)
+			actual, err := testdata.ERC20.ERC20TransferEvent(event)
 			if tt.wantErr {
 				require.Error(t, err)
 				return
@@ -51,29 +50,4 @@ func TestUnpackLog(t *testing.T) {
 			assert.Equal(t, expected, actual)
 		})
 	}
-	//
-	// fn := "testdata/"
-	//
-	// _ = err
-	// spew.Dump(transfer)
-	// type args struct {
-	// 	abisDir     string
-	// 	packagePath string
-	// }
-	// tests := map[string]struct {
-	// 	want    string
-	// 	wantErr bool
-	// }{
-	// 	"erc20": {
-	// 		want:    "",
-	// 		wantErr: false,
-	// 	},
-	// }
-	// for _, tt := range tests {
-	// 	t.Run(tt.name, func(t *testing.T) {
-	// 		if err := NewFromABIs(tt.args.abisDir, tt.args.packagePath); (err != nil) != tt.wantErr {
-	// 			t.Errorf("NewFromABIs() error = %v, wantErr %v", err, tt.wantErr)
-	// 		}
-	// 	})
-	// }
 }
