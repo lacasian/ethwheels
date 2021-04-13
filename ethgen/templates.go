@@ -9,6 +9,7 @@ package {{.Package}}
 import (
 	"math/big"
 
+	web3types "github.com/alethio/web3-go/types"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/lacasian/ethwheels/ethgen"
@@ -57,13 +58,22 @@ func (d *{{$.Prefix}}Decoder) Is{{ $typeName }}(log *types.Log) bool {
 	return log.Topics[0] == d.{{ $typeName }}ID()
 }
 
-func (d *{{$.Prefix}}Decoder) {{ $typeName }}(log types.Log) ({{ $typeName }}, error) {
+func (d *{{$.Prefix}}Decoder) {{ $typeName }}W3(w3l web3types.Log) ({{ $typeName }}, error) {
+	l, err := ethgen.W3LogToLog(w3l)
+	if err != nil {
+		return  {{ $typeName }}{}, err
+	}
+
+	return d.{{ $typeName }}(l)
+}
+
+func (d *{{$.Prefix}}Decoder) {{ $typeName }}(l types.Log) ({{ $typeName }}, error) {
 	var out {{ $typeName }}
-	if !d.Is{{ $typeName }}(&log) {
+	if !d.Is{{ $typeName }}(&l) {
 		return out, ethgen.ErrMismatchingEvent
 	}
-	err := d.UnpackLog(&out, "{{ $event.Name }}", log)
-	out.Raw = log
+	err := d.UnpackLog(&out, "{{ $event.Name }}", l)
+	out.Raw = l
 	return out, err
 }
 

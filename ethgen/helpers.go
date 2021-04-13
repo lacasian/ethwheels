@@ -3,10 +3,14 @@ package ethgen
 import (
 	"fmt"
 	"regexp"
+	"strconv"
 	"strings"
 	"unicode"
 
+	web3types "github.com/alethio/web3-go/types"
 	"github.com/ethereum/go-ethereum/accounts/abi"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/types"
 )
 
 // tmplField is a wrapper around a struct field with binding language
@@ -157,4 +161,40 @@ func embeddableABI(abi []byte) string {
 		return r
 	}, string(abi))
 	return strings.Replace(sa, "\"", "\\\"", -1)
+}
+
+func W3LogToLog(w3l web3types.Log) (types.Log, error) {
+	var el types.Log
+	var topics []common.Hash
+
+	for _, t := range w3l.Topics {
+		topics = append(topics, common.HexToHash(t))
+	}
+
+	bn, err := strconv.ParseUint(w3l.BlockNumber, 0, 64)
+	if err != nil {
+		return el, err
+	}
+
+	txi, err := strconv.ParseUint(w3l.TransactionIndex, 0, 32)
+	if err != nil {
+		return el, err
+	}
+
+	li, err := strconv.ParseInt(w3l.LogIndex, 0, 32)
+	if err != nil {
+		return el, err
+	}
+
+	return types.Log{
+		Address:     common.HexToAddress(w3l.Address),
+		Topics:      topics,
+		Data:        common.FromHex(w3l.Data),
+		BlockNumber: bn,
+		TxHash:      common.HexToHash(w3l.TransactionHash),
+		TxIndex:     uint(txi),
+		BlockHash:   common.HexToHash(w3l.BlockHash),
+		Index:       uint(li),
+		Removed:     w3l.Removed,
+	}, nil
 }

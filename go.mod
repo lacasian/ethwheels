@@ -3,6 +3,7 @@ module github.com/lacasian/ethwheels
 go 1.16
 
 require (
+	github.com/alethio/web3-go v0.0.6 // indirect
 	github.com/btcsuite/btcd v0.21.0-beta // indirect
 	github.com/davecgh/go-spew v1.1.1
 	github.com/ethereum/go-ethereum v1.10.2
