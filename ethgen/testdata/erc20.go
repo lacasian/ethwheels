@@ -45,6 +45,13 @@ func (d *ERC20Decoder) IsERC20ApprovalEvent(log *types.Log) bool {
 	return log.Topics[0] == d.ERC20ApprovalEventID()
 }
 
+func (d *ERC20Decoder) IsERC20ApprovalEventW3(log *web3types.Log) bool {
+	if len(log.Topics) == 0 {
+		return false
+	}
+	return log.Topics[0] == d.ERC20ApprovalEventID().String()
+}
+
 func (d *ERC20Decoder) ERC20ApprovalEventW3(w3l web3types.Log) (ERC20ApprovalEvent, error) {
 	l, err := ethgen.W3LogToLog(w3l)
 	if err != nil {
@@ -80,6 +87,13 @@ func (d *ERC20Decoder) IsERC20TransferEvent(log *types.Log) bool {
 		return false
 	}
 	return log.Topics[0] == d.ERC20TransferEventID()
+}
+
+func (d *ERC20Decoder) IsERC20TransferEventW3(log *web3types.Log) bool {
+	if len(log.Topics) == 0 {
+		return false
+	}
+	return log.Topics[0] == d.ERC20TransferEventID().String()
 }
 
 func (d *ERC20Decoder) ERC20TransferEventW3(w3l web3types.Log) (ERC20TransferEvent, error) {

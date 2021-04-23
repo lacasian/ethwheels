@@ -58,6 +58,13 @@ func (d *{{$.Prefix}}Decoder) Is{{ $typeName }}(log *types.Log) bool {
 	return log.Topics[0] == d.{{ $typeName }}ID()
 }
 
+func (d *{{$.Prefix}}Decoder) Is{{ $typeName }}W3(log *web3types.Log) bool {
+	if len(log.Topics) == 0 {
+		return false
+	}
+	return log.Topics[0] == d.{{ $typeName }}ID().String()
+}
+
 func (d *{{$.Prefix}}Decoder) {{ $typeName }}W3(w3l web3types.Log) ({{ $typeName }}, error) {
 	l, err := ethgen.W3LogToLog(w3l)
 	if err != nil {
