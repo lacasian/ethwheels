@@ -20,7 +20,6 @@ var (
 	_ = big.NewInt
 )
 
-
 const {{.Prefix}}ABI = "{{.InputABI}}"
 
 var {{.Prefix}} = New{{.Prefix}}Decoder()
