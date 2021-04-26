@@ -15,6 +15,12 @@ import (
 	"github.com/lacasian/ethwheels/ethgen"
 )
 
+// Reference imports to suppress errors
+var (
+	_ = big.NewInt
+)
+
+
 const {{.Prefix}}ABI = "{{.InputABI}}"
 
 var {{.Prefix}} = New{{.Prefix}}Decoder()
