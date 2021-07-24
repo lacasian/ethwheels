@@ -18,6 +18,9 @@ import (
 // Reference imports to suppress errors
 var (
 	_ = big.NewInt
+	_ = common.Big1
+	_ = types.BloomLookup
+	_ = web3types.Log{}
 )
 
 const {{.Prefix}}ABI = "{{.InputABI}}"
