@@ -122,15 +122,11 @@ func ProcessFile(dir string, fileName string) (*ContractData, error) {
 
 		fileDefs[id] = event
 	}
-	if len(fileDefs) > 0 {
-		return &ContractData{
-			InputABI: embeddableABI(jsonABI),
-			Defs:     fileDefs,
-			Structs:  structs,
-		}, nil
-	}
-
-	return nil, nil
+	return &ContractData{
+		InputABI: embeddableABI(jsonABI),
+		Defs:     fileDefs,
+		Structs:  structs,
+	}, nil
 }
 
 func GenerateCode(prefix string, pkg string, contract ContractData) ([]byte, error) {
