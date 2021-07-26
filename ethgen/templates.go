@@ -56,7 +56,7 @@ type {{ $typeName }} struct {
 	Raw types.Log
 }
 
-func (d *{{$.Prefix}}Decoder) {{ $typeName }}ID() common.Hash {
+func (d *{{$.Prefix}}Decoder) {{ $typeShortName }}ID() common.Hash {
 	return common.HexToHash("{{ .ID }}")
 }
 
@@ -64,28 +64,28 @@ func (d *{{$.Prefix}}Decoder) Is{{ $typeShortName }}(log *types.Log) bool {
 	if len(log.Topics) == 0 {
 		return false
 	}
-	return log.Topics[0] == d.{{ $typeName }}ID()
+	return log.Topics[0] == d.{{ $typeShortName }}ID()
 }
 
 func (d *{{$.Prefix}}Decoder) Is{{ $typeShortName }}W3(log *web3types.Log) bool {
 	if len(log.Topics) == 0 {
 		return false
 	}
-	return log.Topics[0] == d.{{ $typeName }}ID().String()
+	return log.Topics[0] == d.{{ $typeShortName }}ID().String()
 }
 
-func (d *{{$.Prefix}}Decoder) {{ $typeName }}W3(w3l web3types.Log) ({{ $typeName }}, error) {
+func (d *{{$.Prefix}}Decoder) {{ $typeShortName }}W3(w3l web3types.Log) ({{ $typeName }}, error) {
 	l, err := ethgen.W3LogToLog(w3l)
 	if err != nil {
 		return  {{ $typeName }}{}, err
 	}
 
-	return d.{{ $typeName }}(l)
+	return d.{{ $typeShortName }}(l)
 }
 
-func (d *{{$.Prefix}}Decoder) {{ $typeName }}(l types.Log) ({{ $typeName }}, error) {
+func (d *{{$.Prefix}}Decoder) {{ $typeShortName }}(l types.Log) ({{ $typeName }}, error) {
 	var out {{ $typeName }}
-	if !d.Is{{ $typeName }}(&l) {
+	if !d.Is{{ $typeShortName }}(&l) {
 		return out, ethgen.ErrMismatchingEvent
 	}
 	err := d.UnpackLog(&out, "{{ $event.Name }}", l)
