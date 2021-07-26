@@ -48,6 +48,7 @@ func New{{.Prefix}}Decoder() *{{.Prefix}}Decoder {
 {{ range $key, $event := .Defs }}
 {{ $typePrefix := namedType $.Prefix $event.Name }}
 {{ $typeName := (printf "%s%s" $typePrefix "Event") }}
+{{ $typeShortName := (printf "%s%s" $event.Name "Event") }}
 type {{ $typeName }} struct {
 	{{- range .Inputs }}
 	{{ gopherize .Name }} {{ if .Indexed }}{{ bindTopicType .Type $.Structs }}{{ else }}{{ bindType .Type $.Structs }}{{ end }}
@@ -59,14 +60,14 @@ func (d *{{$.Prefix}}Decoder) {{ $typeName }}ID() common.Hash {
 	return common.HexToHash("{{ .ID }}")
 }
 
-func (d *{{$.Prefix}}Decoder) Is{{ $typeName }}(log *types.Log) bool {
+func (d *{{$.Prefix}}Decoder) Is{{ $typeShortName }}(log *types.Log) bool {
 	if len(log.Topics) == 0 {
 		return false
 	}
 	return log.Topics[0] == d.{{ $typeName }}ID()
 }
 
-func (d *{{$.Prefix}}Decoder) Is{{ $typeName }}W3(log *web3types.Log) bool {
+func (d *{{$.Prefix}}Decoder) Is{{ $typeShortName }}W3(log *web3types.Log) bool {
 	if len(log.Topics) == 0 {
 		return false
 	}
