@@ -7,10 +7,11 @@ import (
 
 	web3types "github.com/alethio/web3-go/types"
 	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/lacasian/ethwheels/ethgen/testdata"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/tzapu/thelper"
+
+	"github.com/lacasian/ethwheels/ethgen/testdata"
 )
 
 var update = flag.Bool("update", false, "update golden files")
@@ -36,7 +37,7 @@ func TestUnpackLog(t *testing.T) {
 			var event types.Log
 			thelper.Load(t, ef, &event)
 
-			actual, err := testdata.ERC20.ERC20TransferEvent(event)
+			actual, err := testdata.ERC20.TransferEvent(event)
 			if tt.wantErr {
 				require.Error(t, err)
 				return
@@ -74,7 +75,7 @@ func TestUnpackLogW3(t *testing.T) {
 			var event web3types.Log
 			thelper.Load(t, ef, &event)
 
-			actual, err := testdata.ERC20.ERC20TransferEventW3(event)
+			actual, err := testdata.ERC20.TransferEventW3(event)
 			if tt.wantErr {
 				require.Error(t, err)
 				return
@@ -105,9 +106,9 @@ func TestUnpackLogMatch(t *testing.T) {
 			var w3event web3types.Log
 			thelper.Load(t, ef, &w3event)
 
-			actual, err := testdata.ERC20.ERC20TransferEvent(event)
+			actual, err := testdata.ERC20.TransferEvent(event)
 			assert.NoError(t, err)
-			w3actual, err := testdata.ERC20.ERC20TransferEventW3(w3event)
+			w3actual, err := testdata.ERC20.TransferEventW3(w3event)
 			assert.NoError(t, err)
 
 			assert.Equal(t, actual, w3actual)
