@@ -13,6 +13,7 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/lacasian/ethwheels/ethgen"
+	"github.com/shopspring/decimal"
 )
 
 // Reference imports to suppress errors
@@ -21,6 +22,7 @@ var (
 	_ = common.Big1
 	_ = types.BloomLookup
 	_ = web3types.Log{}
+	_ = decimal.NewFromBigInt
 )
 
 const {{.Prefix}}ABI = "{{.InputABI}}"
@@ -55,6 +57,15 @@ type {{ $typeName }} struct {
 	{{- end }}
 	Raw types.Log
 }
+
+{{- range .Inputs }}
+{{ $typeString := (bindTopicType .Type $.Structs) }}
+{{ if eq $typeString "*big.Int" }}
+func (e *{{ $typeName }}) {{ gopherize .Name }}Decimal(exp int32) decimal.Decimal {
+	return decimal.NewFromBigInt(e.{{ gopherize .Name }}, exp)
+}
+{{ end }}
+{{- end }}
 
 func (d *{{$.Prefix}}Decoder) {{ $typeShortName }}ID() common.Hash {
 	return common.HexToHash("{{ .ID }}")
@@ -95,30 +106,3 @@ func (d *{{$.Prefix}}Decoder) {{ $typeShortName }}(l types.Log) ({{ $typeName }}
 
 {{ end }}
 `
-
-/*
-"strings"
-
-ethereum "github.com/ethereum/go-ethereum"
-"github.com/ethereum/go-ethereum/accounts/abi"
-
-"github.com/ethereum/go-ethereum/accounts/abi/bind"
-"github.com/ethereum/go-ethereum/event"
-
-// Reference imports to suppress errors if they are not otherwise used.
-// var (
-// 	_ = big.NewInt
-// 	_ = strings.NewReader
-// 	_ = ethereum.NotFound
-// 	_ = bind.Bind
-// 	_ = common.Big1
-// 	_ = types.BloomLookup
-// 	_ = event.NewSubscription
-// )
-
-// {{$contract.Type}}{{.Normalized.Name}} represents a {{.Normalized.Name}} event raised by the {{$contract.Type}} contract.
-type {{$contract.Type}}{{.Normalized.Name}} struct { {{range .Normalized.Inputs}}
-{{capitalise .Name}} {{if .Indexed}}{{bindtopictype .Type $structs}}{{else}}{{bindtype .Type $structs}}{{end}}; {{end}}
-Raw types.Log // Blockchain specific contextual infos
-}
-*/
