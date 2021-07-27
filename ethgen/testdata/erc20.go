@@ -52,14 +52,14 @@ func (d *ERC20Decoder) ApprovalEventID() common.Hash {
 	return common.HexToHash("0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925")
 }
 
-func (d *ERC20Decoder) IsApprovalEvent(log *types.Log) bool {
+func (d *ERC20Decoder) IsApprovalEvent(log types.Log) bool {
 	if len(log.Topics) == 0 {
 		return false
 	}
 	return log.Topics[0] == d.ApprovalEventID()
 }
 
-func (d *ERC20Decoder) IsApprovalEventW3(log *web3types.Log) bool {
+func (d *ERC20Decoder) IsApprovalEventW3(log web3types.Log) bool {
 	if len(log.Topics) == 0 {
 		return false
 	}
@@ -77,7 +77,7 @@ func (d *ERC20Decoder) ApprovalEventW3(w3l web3types.Log) (ERC20ApprovalEvent, e
 
 func (d *ERC20Decoder) ApprovalEvent(l types.Log) (ERC20ApprovalEvent, error) {
 	var out ERC20ApprovalEvent
-	if !d.IsApprovalEvent(&l) {
+	if !d.IsApprovalEvent(l) {
 		return out, ethgen.ErrMismatchingEvent
 	}
 	err := d.UnpackLog(&out, "Approval", l)
@@ -100,14 +100,14 @@ func (d *ERC20Decoder) TransferEventID() common.Hash {
 	return common.HexToHash("0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef")
 }
 
-func (d *ERC20Decoder) IsTransferEvent(log *types.Log) bool {
+func (d *ERC20Decoder) IsTransferEvent(log types.Log) bool {
 	if len(log.Topics) == 0 {
 		return false
 	}
 	return log.Topics[0] == d.TransferEventID()
 }
 
-func (d *ERC20Decoder) IsTransferEventW3(log *web3types.Log) bool {
+func (d *ERC20Decoder) IsTransferEventW3(log web3types.Log) bool {
 	if len(log.Topics) == 0 {
 		return false
 	}
@@ -125,7 +125,7 @@ func (d *ERC20Decoder) TransferEventW3(w3l web3types.Log) (ERC20TransferEvent, e
 
 func (d *ERC20Decoder) TransferEvent(l types.Log) (ERC20TransferEvent, error) {
 	var out ERC20TransferEvent
-	if !d.IsTransferEvent(&l) {
+	if !d.IsTransferEvent(l) {
 		return out, ethgen.ErrMismatchingEvent
 	}
 	err := d.UnpackLog(&out, "Transfer", l)

@@ -71,14 +71,14 @@ func (d *{{$.Prefix}}Decoder) {{ $typeShortName }}ID() common.Hash {
 	return common.HexToHash("{{ .ID }}")
 }
 
-func (d *{{$.Prefix}}Decoder) Is{{ $typeShortName }}(log *types.Log) bool {
+func (d *{{$.Prefix}}Decoder) Is{{ $typeShortName }}(log types.Log) bool {
 	if len(log.Topics) == 0 {
 		return false
 	}
 	return log.Topics[0] == d.{{ $typeShortName }}ID()
 }
 
-func (d *{{$.Prefix}}Decoder) Is{{ $typeShortName }}W3(log *web3types.Log) bool {
+func (d *{{$.Prefix}}Decoder) Is{{ $typeShortName }}W3(log web3types.Log) bool {
 	if len(log.Topics) == 0 {
 		return false
 	}
@@ -96,7 +96,7 @@ func (d *{{$.Prefix}}Decoder) {{ $typeShortName }}W3(w3l web3types.Log) ({{ $typ
 
 func (d *{{$.Prefix}}Decoder) {{ $typeShortName }}(l types.Log) ({{ $typeName }}, error) {
 	var out {{ $typeName }}
-	if !d.Is{{ $typeShortName }}(&l) {
+	if !d.Is{{ $typeShortName }}(l) {
 		return out, ethgen.ErrMismatchingEvent
 	}
 	err := d.UnpackLog(&out, "{{ $event.Name }}", l)
